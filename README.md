@@ -276,6 +276,7 @@ val trainedModel = optimizer.optimize()
 ## Example
 
 - LeNet + MNIST
+
 使用 LeNet 在 MNIST 数据集上进行测试，测试集群为具有 10 个工作节点的 Spark 集群。对于 Baseline（生成聚合数据点且不进行冗余数据识别和移除）训练参数设置为`useComp="false",getGradient="false" and taskDel="false"`。批量大小设置为 13568（256*53=13568）。
 
 冗余数据识别阈值`(0.1 to 0.9,step is 0.1)`，参数设置为`useComp="true",upBound=53,getGradient="true",taskDel="true",taskStrategy="fixedratio" and taskRatio= 0.1 to 0.9`，前 5 个 Epoch 不进行冗余数据删除`notEpoch=5`。批量大小设置为 256。
