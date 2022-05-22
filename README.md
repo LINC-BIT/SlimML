@@ -5,8 +5,14 @@
 SlimML -- A slim learning framework, which trains the ML models only on the critical data and thus signiﬁcantly improves training performance.
 
 
-[TOC]
-
+- [SlimML](#slimml)
+	- [1. 介绍](#1-介绍)
+	- [2. 代码和环境配置](#2-代码和环境配置)
+		- [2.0 代码打包](#20-代码打包)
+		- [2.1 代码提交](#21-代码提交)
+		- [2.2 代码结构](#22-代码结构)
+		- [2.3 环境配置](#23-环境配置)
+	- [Example](#example)
 ## 1. 介绍
 
 许多大规模机器学习应用(如神经网络(NN)、支持向量机(SVM)和卷积神经网络(CNN))的核心是迭代地处理海量数据集以完成模型训练。大量旨在加速机器学习训练的研究普遍假设各个数据样本与模型参数更新等效相关。然而一个显著的事实是不同的数据样本对模型参数更新具有不同的影响。
