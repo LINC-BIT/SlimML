@@ -279,7 +279,7 @@ git clone https://github.com/intel-analytics/BigDL.git
 ```
 
 - 设置编译环境
-在进行编译之前,需要先设置编译环境,包括Java环境,maven环境和Scala环境.这里使用的是JDK1.8,maven3和Scala2.11.12.
+在进行编译之前,需要先设置编译环境,包括 Java 环境, maven 环境和 Scala 环境.这里使用的是 JDK 1.8,maven3和Scala 2.11.8.
 在环境变量中设置如下
 
 ```shell
