@@ -269,9 +269,100 @@ val trainedModel = optimizer.optimize()
 |BigDL 0.8.0|[https://bigdl-project.github.io/0.8.0/#release-download/](https://bigdl-project.github.io/0.8.0/#release-download/)|
 |Hadoop 2.7.7（optional）|[https://hadoop.apache.org/releases.html](https://hadoop.apache.org/releases.html)|
 
-1. HDFS集群搭建
-2. Spark集群搭建
-3. BigDL 编译
+1. BigDL 编译
+
+- 下载BigDL源码
+  
+可以从github下载BigDL的源码,可以根据需要选择对应的版本
+```bash
+git clone https://github.com/intel-analytics/BigDL.git
+```
+
+- 设置编译环境
+在进行编译之前,需要先设置编译环境,包括Java环境,maven环境和Scala环境.这里使用的是JDK1.8,maven3和Scala2.11.12.
+在环境变量中设置如下
+
+```shell
+export M2_HOME=/opt/maven
+export PATH=$PATH:${M2_HOME}/bin
+# 如果直接使用mvn编译则需要设置此参数;使用BigDL提供的make-dist.sh
+# 脚本进行build则可以不设置此参数,因为脚本中会进行设置
+# export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"
+
+export JAVA_HOME=/home/hadoop/sparkEnv/jdk1.8.0_181
+export JRE_HOME=${JAVA_HOME}/jre
+export CLASSPATH=.:${JAVA_HOME}/lib:${JRE_HOME}/lib:$CLASSPATH
+export PATH=${PATH}:$JAVA_HOME/bin:$JRE_HOME/lib
+export JAVA_OPTS='-Xms512m -Xmx8g'
+
+export SCALA_HOME=/home/hadoop/sparkEnv/scala
+export PATH=$PATH:$SCALA_HOME/bin
+```
+
+- Build
+编译过程中所需要的依赖都在BigDL/pom.xml中进行了配置。远程仓库为
+
+```xml
+<url>https://repo1.maven.org/maven2</url>
+<url>https://repository.apache.org/content/repositories/releases</url>
+<url>https://repository.jboss.org/nexus/content/repositories/releases</url>
+<url>https://oss.sonatype.org/content/groups/public/</url>
+```
+
+有时候因为访问速度比较慢或者某些仓库不能访问可能会导致相关依赖下载不下来,对于这种情况可以修改pom.xml,增加国内的仓库,比如aliyun的maven仓库,在pom.xml中的repositories选项下增加如下内容:
+
+```xml
+ 	<repositories>
+	   <repository>
+	    <id>central-ali</id>
+	    <name>aliyun maven</name>
+	    <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+	    <releases>
+		    <enabled>true</enabled>
+	    </releases>
+	    <snapshots>
+		    <enabled>false</enabled>
+	    </snapshots>
+        </repository>
+    </repositories>
+```
+
+修改后保存并开始编译
+
+```bash
+
+# build for spark 2.0 and above
+# 注意下面的spark_2.x中的x不需要替换成具体的版本号,直接使用spark_2.x即可
+bash make-dist.sh -P spark_2.x
+
+# build for scala 2.10 or 2.11
+bash make-dist.sh -P scala_2.10
+# or bash make-dist.sh -P scala_2.11
+
+# build with maven
+mvn clean package -DskipTests
+# 可以传递参数
+# -P spark_2.x
+# -P full-build 
+# -P scala_2.10 or scala_2.11
+
+```
+
+在make-dist.sh脚本中运行的编译命令实际上为:
+
+```bash
+mvn clean package -DskipTests $*
+```
+
+编译完成之后会在当前目录下生成一个dist目录,这里包含了运行BigDL程序所需的所有文件。
+
+``` bash
+dist/bin/bigdl.sh
+dist/bin/other-files
+dist/lib/bigdl-VERSION-jar-with-dependencies.jar
+dist/lib/bigdl-VERSION-python-api.zip
+dist/conf/spark-bigdl.conf
+```
 
 ## Example
 
